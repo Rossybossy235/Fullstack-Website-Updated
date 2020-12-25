@@ -38,7 +38,7 @@ exports.getAllScreams = (req, res) => {
       .then(doc => {
         const resScream = newScream;
         resScream.screamId = doc.id;
-        res.json({resScream});
+        res.json(resScream);
       })
       .catch(err => {
         res.status(500).json({ error: 'something went wrong'});
