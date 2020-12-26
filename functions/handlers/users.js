@@ -146,7 +146,7 @@ exports.signup = (req, res) => {
       .then(data => {
         userData.likes = [];
         data.forEach(doc => {
-          userData.likes.push(...doc.data());
+          userData.likes.push({ likeId: doc.id, ...doc.data() });
         });
         return db.collection('notifications').where('recipient', '==', req.user.handle)
           .orderBy('createdAt', 'desc').limit(10).get();
