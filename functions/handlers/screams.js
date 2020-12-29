@@ -115,10 +115,17 @@ exports.likeScream = (req, res) => {
       if(doc.exists){
         screamData = doc.data();
         screamData.screamId = doc.id;
-        return likeDocument.get();
+        return db.collection('comments').where('screamId', '==', req.params.screamId).get();
       } else {
         return res.status(404).json({ error: 'Scream not found' });
       }
+    })
+    .then((data) => {
+      screamData.comments = [];
+      data.forEach((doc) => {
+        screamData.comments.push(doc.data());
+      });
+      return likeDocument.get();
     })
     .then(data => {
       if(data.empty){
@@ -156,10 +163,17 @@ exports.unlikeScream = (req, res) => {
       if(doc.exists){
         screamData = doc.data();
         screamData.screamId = doc.id;
-        return likeDocument.get();
+        return db.collection('comments').where('screamId', '==', req.params.screamId).get();
       } else {
         return res.status(404).json({ error: 'Scream not found' });
       }
+    })
+    .then((data) => {
+      screamData.comments = [];
+      data.forEach((doc) => {
+        screamData.comments.push(doc.data());
+      });
+      return likeDocument.get();
     })
     .then(data => {
       if(data.empty){
