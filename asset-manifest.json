@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/Fullstack-Website-Updated/static/css/main.be50fcda.chunk.css",
-    "main.js": "/Fullstack-Website-Updated/static/js/main.e8065973.chunk.js",
-    "main.js.map": "/Fullstack-Website-Updated/static/js/main.e8065973.chunk.js.map",
+    "main.js": "/Fullstack-Website-Updated/static/js/main.b6b43a54.chunk.js",
+    "main.js.map": "/Fullstack-Website-Updated/static/js/main.b6b43a54.chunk.js.map",
     "runtime-main.js": "/Fullstack-Website-Updated/static/js/runtime-main.2dd2c904.js",
     "runtime-main.js.map": "/Fullstack-Website-Updated/static/js/runtime-main.2dd2c904.js.map",
     "static/js/2.d1da0771.chunk.js": "/Fullstack-Website-Updated/static/js/2.d1da0771.chunk.js",
@@ -18,6 +18,6 @@
     "static/js/runtime-main.2dd2c904.js",
     "static/js/2.d1da0771.chunk.js",
     "static/css/main.be50fcda.chunk.css",
-    "static/js/main.e8065973.chunk.js"
+    "static/js/main.b6b43a54.chunk.js"
   ]
 }
