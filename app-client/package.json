@@ -2,7 +2,7 @@
   "name": "fullstackwebsite-client",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://Rossybossy235.github.io/Fullstack-Website-Updated",
+  "homepage": "http://rossybossy235.github.io/Fullstack-Website-Updated",
   "dependencies": {
     "@material-ui/core": "^4.11.1",
     "@material-ui/icons": "^4.9.1",
