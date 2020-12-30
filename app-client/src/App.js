@@ -1,5 +1,5 @@
 import './App.css';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import React, { Component } from 'react';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
@@ -55,6 +55,7 @@ export class App extends Component {
                   <AuthRoute exact path="/signup" component={signup}/>
                   <Route exact path="/users/:handle" component={user}/>
                   <Route exact path="/users/:handle/scream/:screamId" component={user}/>
+                  <Redirect to="/"/>
                 </Switch>
               </div>
             </Router>
