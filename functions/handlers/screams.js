@@ -61,7 +61,8 @@ exports.getAllScreams = (req, res) => {
       .then(data => {
         screamData.comments = [];
         data.forEach(doc => {
-          screamData.comments.push(doc.data());
+          commentData = { commentId: doc.id, ...doc.data() };
+          screamData.comments.push(commentData);
         });
         return res.json(screamData);
       })
@@ -79,7 +80,8 @@ exports.commentOnScream = (req, res) => {
     createdAt: new Date().toISOString(),
     screamId: req.params.screamId,
     userHandle: req.user.handle,
-    userImage: req.user.imageUrl
+    userImage: req.user.imageUrl,
+    likeCount: 0
   };
 
   db.doc(`/screams/${req.params.screamId}`).get()
@@ -115,7 +117,7 @@ exports.likeScream = (req, res) => {
       if(doc.exists){
         screamData = doc.data();
         screamData.screamId = doc.id;
-        return db.collection('comments').where('screamId', '==', req.params.screamId).get();
+        return db.collection('comments').orderBy('createdAt', 'desc').where('screamId', '==', req.params.screamId).get();
       } else {
         return res.status(404).json({ error: 'Scream not found' });
       }
@@ -123,7 +125,8 @@ exports.likeScream = (req, res) => {
     .then((data) => {
       screamData.comments = [];
       data.forEach((doc) => {
-        screamData.comments.push(doc.data());
+        commentData = { commentId: doc.id, ...doc.data() };
+        screamData.comments.push(commentData);
       });
       return likeDocument.get();
     })
@@ -163,7 +166,7 @@ exports.unlikeScream = (req, res) => {
       if(doc.exists){
         screamData = doc.data();
         screamData.screamId = doc.id;
-        return db.collection('comments').where('screamId', '==', req.params.screamId).get();
+        return db.collection('comments').orderBy('createdAt', 'desc').where('screamId', '==', req.params.screamId).get();
       } else {
         return res.status(404).json({ error: 'Scream not found' });
       }
@@ -171,7 +174,8 @@ exports.unlikeScream = (req, res) => {
     .then((data) => {
       screamData.comments = [];
       data.forEach((doc) => {
-        screamData.comments.push(doc.data());
+        commentData = { commentId: doc.id, ...doc.data() };
+        screamData.comments.push(commentData);
       });
       return likeDocument.get();
     })
@@ -217,3 +221,83 @@ exports.deleteScream = (req, res) => {
       return res.status(500).json({ error: err.code });
     })
 }
+
+//like a comment
+exports.likeComment = (req, res) => {
+  const likeDocument = db.collection('likes').where('userHandle', '==', req.user.handle)
+    .where('commentId', '==', req.params.commentId).limit(1);
+
+  const commentDocument = db.doc(`/comments/${req.params.commentId}`);
+
+  let commentData;
+
+  commentDocument.get()
+    .then(doc => {
+      if(doc.exists){
+        commentData = doc.data();
+        commentData.commentId = doc.id;
+        return likeDocument.get();
+      } else {
+        return res.status(404).json({ error: 'Comment not found' });
+      }
+    })
+    .then(data => {
+      if(data.empty){
+        return db.collection('likes').add({
+          commentId: req.params.commentId,
+          userHandle: req.user.handle
+        })
+        .then(() => {
+          commentData.likeCount++;
+          return commentDocument.update({ likeCount: commentData.likeCount });
+        })
+        .then(() => {
+          return res.json(commentData);
+        });
+      } else {
+        return res.status(400).json({ error: 'Comment already liked' });
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};
+
+exports.unlikeComment = (req, res) => {
+  const likeDocument = db.collection('likes').where('userHandle', '==', req.user.handle)
+    .where('commentId', '==', req.params.commentId).limit(1);
+
+  const commentDocument = db.doc(`/comments/${req.params.commentId}`);
+
+  let commentData;
+
+  commentDocument.get()
+    .then(doc => {
+      if(doc.exists){
+        commentData = doc.data();
+        commentData.commentId = doc.id;
+        return likeDocument.get();
+      } else {
+        return res.status(404).json({ error: 'Comment not found' });
+      }
+    })
+    .then(data => {
+      if(data.empty){
+        return res.status(400).json({ error: 'Comment not liked' });
+      } else {
+        return db.doc(`likes/${data.docs[0].id}`).delete()
+          .then(() => {
+            commentData.likeCount--;
+            return commentDocument.update({ likeCount: commentData.likeCount });
+          })
+          .then(() => {
+            return res.json(commentData);
+          })
+      }
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).json({ error: err.code });
+    });
+};

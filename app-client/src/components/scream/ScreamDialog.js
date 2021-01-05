@@ -49,14 +49,14 @@ const styles = theme => ({
     }
 });
 
-class ScreamDialog extends Component{
+class ScreamDialog extends Component {
     state = {
         open: false,
         oldPath: '',
         newPath: ''
     }
-    componentDidMount(){
-        if(this.props.openDialog){
+    componentDidMount() {
+        if (this.props.openDialog) {
             this.handleOpen();
         }
     }
@@ -66,7 +66,7 @@ class ScreamDialog extends Component{
         const { userHandle, screamId } = this.props;
         const newPath = `/users/${userHandle}/scream/${screamId}`;
 
-        if(oldPath === newPath) oldPath = `/users/${userHandle}`;
+        if (oldPath === newPath) oldPath = `/users/${userHandle}`;
 
         window.history.pushState(null, null, newPath);
 
@@ -79,26 +79,26 @@ class ScreamDialog extends Component{
         this.props.clearErrors();
     }
 
-    render(){
-        const { classes, scream: { 
-                                    screamId, 
-                                    body, 
-                                    createdAt, 
-                                    likeCount, 
-                                    commentCount, 
-                                    userImage, 
-                                    userHandle, 
-                                    comments }, 
-            UI: { loading }} = this.props;
-
-            const dialogMarkup = loading ? (
-                <div className={classes.spinnerDiv}>
-                    <CircularProgress size={200} thickness={2}/>
-                </div>
-            ) : (
+    render() {
+        const { classes, data: { scream: {
+            screamId,
+            body,
+            createdAt,
+            likeCount,
+            commentCount,
+            userImage,
+            userHandle,
+            comments } },
+            UI: { loading } } = this.props;
+        
+        const dialogMarkup = loading ? (
+            <div className={classes.spinnerDiv}>
+                <CircularProgress size={200} thickness={2} />
+            </div>
+        ) : (
                 <Grid container spacing={16}>
                     <Grid item sm={5}>
-                        <img src={userImage} alt="Profile" className={classes.profileImage}/>
+                        <img src={userImage} alt="Profile" className={classes.profileImage} />
                     </Grid>
                     <Grid item sm={7}>
                         <Typography
@@ -109,42 +109,42 @@ class ScreamDialog extends Component{
                         >
                             @{userHandle}
                         </Typography>
-                        <hr className={classes.invisibleSeparator}/>
+                        <hr className={classes.invisibleSeparator} />
                         <Typography variant="body2" color="textSecondary">
                             {dayjs(createdAt).format('h:mm a, MMMM DD YYYY')}
                         </Typography>
-                        <hr className={classes.invisibleSeparator}/>
+                        <hr className={classes.invisibleSeparator} />
                         <Typography variant="body1">
                             {body}
                         </Typography>
-                        <LikeButton screamId={screamId}/>
+                        <LikeButton screamId={screamId} />
                         <span>{likeCount} Likes</span>
                         <MyButton tip="comments">
-                            <ChatIcon color="primary"/>
+                            <ChatIcon color="primary" />
                         </MyButton>
                         <span>{commentCount} Comments</span>
                     </Grid>
-                    <hr className={classes.visibleSeparator}/>
-                    <CommentForm screamId={screamId}/>
-                    <Comments comments={comments}/>
+                    <hr className={classes.visibleSeparator} />
+                    <CommentForm screamId={screamId} />
+                    <Comments comments={comments} />
                 </Grid>
             );
 
-            return (
-                <Fragment>
-                    <MyButton onClick={this.handleOpen} tip="Expand scream" tipClassName={classes.expandButton}>
-                        <UnfoldMore color="primary"/>
+        return (
+            <Fragment>
+                <MyButton onClick={this.handleOpen} tip="Expand scream" tipClassName={classes.expandButton}>
+                    <UnfoldMore color="primary" />
+                </MyButton>
+                <Dialog open={this.state.open} onClose={this.handleClose} fullWidth maxWidth="sm">
+                    <MyButton tip="Close" onClick={this.handleClose} tipClassName={classes.closeButton}>
+                        <CloseIcon />
                     </MyButton>
-                    <Dialog open={this.state.open} onClose={this.handleClose} fullWidth maxWidth="sm">
-                        <MyButton tip="Close" onClick={this.handleClose} tipClassName={classes.closeButton}>
-                            <CloseIcon/>
-                        </MyButton>
-                        <DialogContent className={classes.dialogContent}>
-                            {dialogMarkup}
-                        </DialogContent>
-                    </Dialog>
-                </Fragment>
-            );
+                    <DialogContent className={classes.dialogContent}>
+                        {dialogMarkup}
+                    </DialogContent>
+                </Dialog>
+            </Fragment>
+        );
     }
 }
 
@@ -153,12 +153,12 @@ ScreamDialog.propTypes = {
     getScream: PropTypes.func.isRequired,
     screamId: PropTypes.string.isRequired,
     userHandle: PropTypes.string.isRequired,
-    scream: PropTypes.object.isRequired,
+    data: PropTypes.object.isRequired,
     UI: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
-    scream: state.data.scream,
+    data: state.data,
     UI: state.UI
 })
 

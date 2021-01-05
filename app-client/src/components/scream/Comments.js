@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
+import LikeButton2 from './LikeButton2';
 
 //MUI imports
 import Grid from '@material-ui/core/Grid';
@@ -27,7 +28,7 @@ class Comments extends Component {
         return (
             <Grid container>
                 {comments.map((comment, index) => {
-                    const { body, createdAt, userImage, userHandle } = comment;
+                    const { screamId, commentId, body, createdAt, userImage, userHandle, likeCount } = comment;
                     return (
                         <Fragment key={createdAt}>
                             <Grid item sm={12}>
@@ -44,6 +45,9 @@ class Comments extends Component {
                                                 color="primary">
                                                     {userHandle}
                                             </Typography>
+                                            <LikeButton2 screamId={screamId} commentId={commentId}/>
+                                            {likeCount} Likes
+                                            <br/>
                                             <Typography variant="body2" color="textSecondary">
                                                 {dayjs(createdAt).format('h:mm a, MMMM DD YYYY')}
                                             </Typography>

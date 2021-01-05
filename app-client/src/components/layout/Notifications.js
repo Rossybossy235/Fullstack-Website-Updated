@@ -63,6 +63,7 @@ class Notifications extends Component {
                     const verb = not.type === 'like' ? 'liked' : 'commented on';
                     const time = dayjs(not.createdAt).fromNow();
                     const iconColor = not.read ? 'primary' : 'secondary';
+                    const type = not.commentId ? 'comment' : 'scream';
                     const icon = not.type === 'like' ? (
                         <FavoriteIcon color={iconColor} style={{ marginRight: 10 }}/>
                     ) : (
@@ -78,7 +79,7 @@ class Notifications extends Component {
                                 variant="body1"
                                 to={`/users/${not.recipient}/scream/${not.screamId}`}
                             >
-                                {not.sender} {verb} your scream {time}
+                                {not.sender} {verb} your {type} {time}
                             </Typography>
                         </MenuItem>
                     )
