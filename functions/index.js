@@ -6,7 +6,7 @@ app.use(cors());
 
 const FBAuth = require ('./util/FBAuth');
 
-const { getAllScreams, postOneScream, getScream, commentOnScream, likeScream, unlikeScream, deleteScream, likeComment, unlikeComment } = require('./handlers/screams');
+const { getAllScreams, postOneScream, getScream, commentOnScream, likeScream, unlikeScream, deleteScream, likeComment, unlikeComment, deleteComment } = require('./handlers/screams');
 const { signup, login, uploadImage, addUserDetails, getAuthenticatedUser, getUserDetails, markNotificationsRead } = require('./handlers/users');
 const { db } = require('./util/admin');
 
@@ -20,6 +20,7 @@ app.get('/scream/:screamId/unlike', FBAuth, unlikeScream);
 app.delete('/scream/:screamId', FBAuth, deleteScream);
 app.get('/screams/:screamId/comment/:commentId/like', FBAuth, likeComment);
 app.get('/screams/:screamId/comment/:commentId/unlike', FBAuth, unlikeComment);
+app.delete('/screams/:screamId/comment/:commentId', FBAuth, deleteComment);
 
 // Users routes
 app.post('/signup', signup);
@@ -141,3 +142,22 @@ exports.onScreamDelete = functions.firestore.document('/screams/{screamId}')
             })
             .catch(err => console.error(err));
     });
+exports.onCommentDelete = functions.firestore.document('/comments/{commentId}')
+    .onDelete((snapshot, context) => {
+        const commentId = context.params.commentId;
+        const batch = db.batch();
+        return db.collection('likes').where('commentId', '==', commentId).get()
+            .then(data => {
+                data.forEach(doc => {
+                    batch.delete(db.doc(`/likes/${doc.id}`));
+                })
+                return db.collection('notifications').where('commentId', '==', commentId).get();
+            })
+            .then(data => {
+                data.forEach(doc => {
+                    batch.delete(db.doc(`/notifications/${doc.id}`));
+                })
+                return batch.commit();
+            })
+            .catch(err => console.error(err));
+});

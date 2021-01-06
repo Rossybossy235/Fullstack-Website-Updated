@@ -22,3 +22,4 @@ export const POST_SCREAM = 'POST_SCREAM';
 export const SUBMIT_COMMENT = 'SUBMIT_COMMENT';
 export const LIKE_COMMENT = 'LIKE_COMMENT';
 export const UNLIKE_COMMENT = 'UNLIKE_COMMENT';
+export const DELETE_COMMENT = 'DELETE_COMMENT';

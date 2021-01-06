@@ -1,6 +1,6 @@
 import { SET_SCREAMS, LOADING_DATA, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM, 
         SET_ERRORS, POST_SCREAM, CLEAR_ERRORS, LOADING_UI, SET_SCREAM, 
-        STOP_LOADING_UI, SUBMIT_COMMENT, LIKE_COMMENT, UNLIKE_COMMENT } from '../types';
+        STOP_LOADING_UI, SUBMIT_COMMENT, LIKE_COMMENT, UNLIKE_COMMENT, DELETE_COMMENT } from '../types';
 import axios from 'axios';
 
 //get all screams
@@ -95,6 +95,7 @@ export const submitComment = (screamId, commentData) => (dispatch) => {
         });
 }
 
+//delete a scream
 export const deleteScream = (screamId) => (dispatch) => {
     axios.delete(`/scream/${screamId}`)
         .then(() => {
@@ -140,6 +141,15 @@ export const unlikeComment = (screamId, commentId) => dispatch => {
                 type: UNLIKE_COMMENT,
                 payload: res.data
             })
+        })
+        .catch(err => console.log(err));
+}
+
+//delete a comment
+export const deleteComment = (screamId, commentId) => (dispatch) => {
+    axios.delete(`/screams/${screamId}/comment/${commentId}`)
+        .then(() => {
+            dispatch({ type: DELETE_COMMENT, payload: commentId})
         })
         .catch(err => console.log(err));
 }

@@ -4,6 +4,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import LikeButton2 from './LikeButton2';
+import DeleteComment from './DeleteComment';
 
 //MUI imports
 import Grid from '@material-ui/core/Grid';
@@ -20,7 +21,7 @@ const styles = theme => ({
     commentData: {
         marginLeft: 20
     }
-})
+});
 
 class Comments extends Component {
     render() {
@@ -47,6 +48,7 @@ class Comments extends Component {
                                             </Typography>
                                             <LikeButton2 screamId={screamId} commentId={commentId}/>
                                             {likeCount} Likes
+                                            <DeleteComment screamId={screamId} commentId={commentId}/>
                                             <br/>
                                             <Typography variant="body2" color="textSecondary">
                                                 {dayjs(createdAt).format('h:mm a, MMMM DD YYYY')}

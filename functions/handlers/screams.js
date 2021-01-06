@@ -94,8 +94,10 @@ exports.commentOnScream = (req, res) => {
     .then(() => {
       return db.collection('comments').add(newComment);
     })
-    .then(() => {
-      res.json(newComment);
+    .then((doc) => {
+      const resComment = newComment;
+      resComment.commentId = doc.id;
+      res.json(resComment);
     })
     .catch(err => {
       console.error(err);
@@ -300,4 +302,27 @@ exports.unlikeComment = (req, res) => {
       console.error(err);
       res.status(500).json({ error: err.code });
     });
+};
+
+// delete a comment
+exports.deleteComment = (req, res) => {
+  const document = db.doc(`/comments/${req.params.commentId}`);
+  document.get()
+    .then(doc => {
+      if(!doc.exists){
+        return res.status(404).json({ error: 'Comment not found' });
+      }
+      if(doc.data().userHandle !== req.user.handle){
+        return res.status(403).json({ error: 'Unauthorized' });
+      } else {
+        return document.delete();
+      }
+    })
+    .then(() => {
+      res.json({ message: 'Comment deleted successfully' });
+    })
+    .catch(err => {
+      console.error(err);
+      return res.status(500).json({ error: err.code });
+    })
 };

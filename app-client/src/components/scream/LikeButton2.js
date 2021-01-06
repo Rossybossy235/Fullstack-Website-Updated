@@ -11,7 +11,7 @@ import FavoriteBorder from '@material-ui/icons/FavoriteBorder';
 import { connect } from 'react-redux'
 import { likeComment, unlikeComment } from '../../redux/actions/dataActions';
 
-export class LikeButton2 extends Component {
+class LikeButton2 extends Component {
     likedComment = () => {
         if(this.props.user.likes && this.props.user.likes.find((like) => like.commentId === this.props.commentId))
             return true;
