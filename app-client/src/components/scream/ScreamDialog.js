@@ -89,8 +89,8 @@ class ScreamDialog extends Component {
             userImage,
             userHandle,
             comments } },
-            UI: { loading } } = this.props;
-        
+            UI: { loading }, user: { authenticated, credentials: { handle } } } = this.props;
+
         const dialogMarkup = loading ? (
             <div className={classes.spinnerDiv}>
                 <CircularProgress size={200} thickness={2} />
@@ -126,7 +126,7 @@ class ScreamDialog extends Component {
                     </Grid>
                     <hr className={classes.visibleSeparator} />
                     <CommentForm screamId={screamId} />
-                    <Comments comments={comments} />
+                    <Comments authenticated={authenticated} handle={handle} comments={comments} />
                 </Grid>
             );
 

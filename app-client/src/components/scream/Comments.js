@@ -10,6 +10,9 @@ import DeleteComment from './DeleteComment';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
+//Redux
+import { connect } from 'react-redux';
+
 const styles = theme => ({
     ...theme.spread,
     commentImage: {
@@ -25,11 +28,14 @@ const styles = theme => ({
 
 class Comments extends Component {
     render() {
-        const { comments, classes } = this.props;
+        const { comments, classes, authenticated, handle } = this.props;
         return (
             <Grid container>
                 {comments.map((comment, index) => {
                     const { screamId, commentId, body, createdAt, userImage, userHandle, likeCount } = comment;
+                    const deleteButton = authenticated && userHandle === handle ? (
+                        <DeleteComment screamId={screamId} commentId={commentId}/>
+                    ) : null
                     return (
                         <Fragment key={createdAt}>
                             <Grid item sm={12}>
@@ -48,7 +54,7 @@ class Comments extends Component {
                                             </Typography>
                                             <LikeButton2 screamId={screamId} commentId={commentId}/>
                                             {likeCount} Likes
-                                            <DeleteComment screamId={screamId} commentId={commentId}/>
+                                            {deleteButton}
                                             <br/>
                                             <Typography variant="body2" color="textSecondary">
                                                 {dayjs(createdAt).format('h:mm a, MMMM DD YYYY')}
@@ -71,6 +77,8 @@ class Comments extends Component {
 }
 
 Comment.propTypes = {
+    authenticated: PropTypes.bool.isRequired,
+    handle: PropTypes.string.isRequired,
     comments: PropTypes.array.isRequired
 }
 

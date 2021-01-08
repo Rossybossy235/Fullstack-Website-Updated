@@ -92,7 +92,8 @@ exports.createNotificationOnComment = functions.firestore.document('comments/{id
                         sender: snapshot.data().userHandle,
                         type: 'comment',
                         read: false,
-                        screamId: doc.id
+                        screamId: doc.id,
+                        commentId: snapshot.id
                     });
                 }
             })

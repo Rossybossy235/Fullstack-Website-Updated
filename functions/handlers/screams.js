@@ -319,7 +319,16 @@ exports.deleteComment = (req, res) => {
       }
     })
     .then(() => {
-      res.json({ message: 'Comment deleted successfully' });
+      db.doc(`/screams/${req.params.screamId}`).get()
+      .then(doc => {
+        if(!doc.exists){
+          return res.status(404).json({ error: 'Scream not found' });
+        }
+        return doc.ref.update({ commentCount: doc.data().commentCount - 1 });
+      })
+      .then(() => {
+        res.json({ message: 'Comment deleted successfully' });
+      });
     })
     .catch(err => {
       console.error(err);
