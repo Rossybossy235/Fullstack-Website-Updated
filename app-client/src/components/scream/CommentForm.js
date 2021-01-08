@@ -6,6 +6,7 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 //redux imports
 import { connect } from 'react-redux';
@@ -39,7 +40,7 @@ export class CommentForm extends Component {
     }
 
     render() {
-        const { classes, authenticated } = this.props;
+        const { classes, authenticated, data: { loading2 } } = this.props;
         const errors = this.state.errors;
 
         const commentFormMarkup = authenticated ? (
@@ -60,7 +61,8 @@ export class CommentForm extends Component {
                             variant="contained"
                             color="primary"
                             className={classes.button}
-                    >Submit</Button>
+                            disabled={loading2}
+                    >Submit {loading2 && <CircularProgress size={30} className={classes.progress}/>}</Button>
                 </form>
                 <hr className={classes.visibleSeparator}/>
             </Grid>
@@ -74,12 +76,14 @@ CommentForm.propTypes = {
     UI: PropTypes.object.isRequired,
     classes: PropTypes.object.isRequired,
     screamId: PropTypes.string.isRequired,
-    authenticated: PropTypes.bool.isRequired
+    authenticated: PropTypes.bool.isRequired,
+    data: PropTypes.object.isRequired
 }
 
 const mapStateToProps = state => ({
     UI: state.UI,
-    authenticated: state.user.authenticated
+    authenticated: state.user.authenticated,
+    data: state.data
 })
 
 export default connect(mapStateToProps, { submitComment })(withStyles(styles)(CommentForm));

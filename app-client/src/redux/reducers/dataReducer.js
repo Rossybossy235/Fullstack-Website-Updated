@@ -1,20 +1,38 @@
-import { SET_SCREAMS, LIKE_SCREAM, UNLIKE_SCREAM, LOADING_DATA,
-        DELETE_SCREAM, POST_SCREAM, SET_SCREAM, SUBMIT_COMMENT,
-        LIKE_COMMENT, UNLIKE_COMMENT, DELETE_COMMENT } from '../types';
+import {
+    SET_SCREAMS, LIKE_SCREAM, UNLIKE_SCREAM, LOADING_DATA, LOADING_DATA2,
+    DELETE_SCREAM, POST_SCREAM, SET_SCREAM, SUBMIT_COMMENT,
+    LIKE_COMMENT, UNLIKE_COMMENT, DELETE_COMMENT, SET_ERRORS, CLEAR_ERRORS
+} from '../types';
 
 const initialState = {
     screams: [],
     scream: {},
-    loading: false
+    loading: false,
+    loading2: false
 };
 
-export default function(state = initialState, action){
+export default function (state = initialState, action) {
     let index;
-    switch(action.type){
+    switch (action.type) {
+        case SET_ERRORS:
+            return {
+                ...state,
+                loading2: false
+            };
+        case CLEAR_ERRORS:
+            return {
+                ...state,
+                loading2: false
+            };
         case LOADING_DATA:
             return {
                 ...state,
                 loading: true
+            }
+        case LOADING_DATA2:
+            return {
+                ...state,
+                loading2: true
             }
         case SET_SCREAMS:
             return {
@@ -31,7 +49,7 @@ export default function(state = initialState, action){
         case UNLIKE_SCREAM:
             index = state.screams.findIndex((scream) => scream.screamId === action.payload.screamId);
             state.screams[index] = action.payload;
-            if(state.scream.screamId === action.payload.screamId){
+            if (state.scream.screamId === action.payload.screamId) {
                 state.scream = action.payload;
             }
             return {
@@ -54,6 +72,7 @@ export default function(state = initialState, action){
         case SUBMIT_COMMENT:
             return {
                 ...state,
+                loading2: false,
                 scream: {
                     ...state.scream,
                     commentCount: state.scream.commentCount + 1,
