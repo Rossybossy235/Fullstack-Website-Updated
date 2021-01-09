@@ -1,7 +1,7 @@
 import {
     SET_SCREAMS, LIKE_SCREAM, UNLIKE_SCREAM, LIKING_SCREAM, LOADING_DATA, LOADING_DATA2, 
     DELETE_SCREAM, POST_SCREAM, SET_SCREAM, SUBMIT_COMMENT,
-    LIKE_COMMENT, UNLIKE_COMMENT, DELETE_COMMENT, SET_ERRORS, CLEAR_ERRORS
+    LIKE_COMMENT, UNLIKE_COMMENT, LIKING_COMMENT, DELETE_COMMENT, SET_ERRORS, CLEAR_ERRORS
 } from '../types';
 
 const initialState = {
@@ -90,8 +90,14 @@ export default function (state = initialState, action) {
             index = state.scream.comments.findIndex((comment) => comment.commentId === action.payload.commentId);
             state.scream.comments[index] = action.payload;
             return {
-                ...state
+                ...state,
+                loading4: false
             };
+        case LIKING_COMMENT:
+            return {
+                ...state,
+                loading4: true
+            }
         case DELETE_COMMENT:
             index = state.scream.comments.findIndex((comment) => comment.commentId === action.payload);
             state.scream.comments.splice(index, 1);

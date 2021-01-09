@@ -1,6 +1,6 @@
 import { SET_SCREAMS, LOADING_DATA, LOADING_DATA2, LIKE_SCREAM, UNLIKE_SCREAM, LIKING_SCREAM, DELETE_SCREAM, 
         SET_ERRORS, POST_SCREAM, CLEAR_ERRORS, LOADING_UI, SET_SCREAM, 
-        STOP_LOADING_UI, SUBMIT_COMMENT, LIKE_COMMENT, UNLIKE_COMMENT, DELETE_COMMENT } from '../types';
+        STOP_LOADING_UI, SUBMIT_COMMENT, LIKE_COMMENT, UNLIKE_COMMENT, LIKING_COMMENT, DELETE_COMMENT } from '../types';
 import axios from 'axios';
 
 //get all screams
@@ -126,6 +126,7 @@ export const getUserData = (userHandle) => dispatch => {
 
 //like a comment
 export const likeComment = (screamId, commentId) => dispatch => {
+    dispatch({ type: LIKING_COMMENT });
     axios.get(`/screams/${screamId}/comment/${commentId}/like`)
         .then(res => {
             dispatch({
@@ -138,6 +139,7 @@ export const likeComment = (screamId, commentId) => dispatch => {
 
 //unlike a comment
 export const unlikeComment = (screamId, commentId) => dispatch => {
+    dispatch({ type: LIKING_COMMENT });
     axios.get(`/screams/${screamId}/comment/${commentId}/unlike`)
         .then(res => {
             dispatch({
