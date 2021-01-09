@@ -1,4 +1,4 @@
-import { SET_SCREAMS, LOADING_DATA, LOADING_DATA2, LIKE_SCREAM, UNLIKE_SCREAM, DELETE_SCREAM, 
+import { SET_SCREAMS, LOADING_DATA, LOADING_DATA2, LIKE_SCREAM, UNLIKE_SCREAM, LIKING_SCREAM, DELETE_SCREAM, 
         SET_ERRORS, POST_SCREAM, CLEAR_ERRORS, LOADING_UI, SET_SCREAM, 
         STOP_LOADING_UI, SUBMIT_COMMENT, LIKE_COMMENT, UNLIKE_COMMENT, DELETE_COMMENT } from '../types';
 import axios from 'axios';
@@ -55,6 +55,7 @@ export const postScream = (newScream) => (dispatch) => {
 
 //like a scream
 export const likeScream = (screamId) => dispatch => {
+    dispatch({ type: LIKING_SCREAM });
     axios.get(`/scream/${screamId}/like`)
         .then(res => {
             dispatch({
@@ -67,6 +68,7 @@ export const likeScream = (screamId) => dispatch => {
 
 //unlike a scream
 export const unlikeScream = (screamId) => dispatch => {
+    dispatch({ type: LIKING_SCREAM });
     axios.get(`/scream/${screamId}/unlike`)
         .then(res => {
             dispatch({

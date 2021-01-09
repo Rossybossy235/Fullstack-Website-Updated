@@ -25,6 +25,7 @@ export class LikeButton extends Component {
     };
     render() {
         const { authenticated } = this.props.user;
+        const { data: { loading3 } } = this.props;
         const likeButton = !authenticated ? (
             <Link to="/login">
                 <MyButton tip="Like">
@@ -33,11 +34,11 @@ export class LikeButton extends Component {
             </Link>
         ) : (
             this.likedScream() ? (
-                <MyButton tip="Undo like" onClick={this.unlikeScream}>
+                <MyButton tip="Undo like" disabled={loading3} onClick={this.unlikeScream}>
                     <FavoriteIcon color="primary"/>
                 </MyButton>
             ) : (
-                <MyButton tip="Like" onClick={this.likeScream}>
+                <MyButton tip="Like" disabled={loading3} onClick={this.likeScream}>
                     <FavoriteBorder color="primary"/>
                 </MyButton>
             )
@@ -55,7 +56,8 @@ LikeButton.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user
+    user: state.user,
+    data: state.data
 })
 
 const mapActionsToProps = {
